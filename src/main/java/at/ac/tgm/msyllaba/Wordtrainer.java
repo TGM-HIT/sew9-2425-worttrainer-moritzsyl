@@ -1,5 +1,9 @@
 package at.ac.tgm.msyllaba;
 
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import java.awt.*;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,14 +12,44 @@ public class Wordtrainer {
     private List<TrainingPair> trainingPairs;
     private TrainingPair currentPair;
     private int total, incorrect;
+    private SaveLoad saveload = new SaveLoadJSON(this);
 
     public Wordtrainer() {
-        if(trainingPairs == null){                         // laden oder default laden - Abfrage mittels J Option Pane
-
+        if(JOptionPane.showConfirmDialog(
+                null,
+                "Spielstand laden?",
+                "laden",
+                JOptionPane.YES_NO_OPTION
+            ) == 0) {
+            saveload.load("test.json");
+        } else{
+            this.setDefaultTrainingPairs();
         }
-        this.trainingPairs = trainingPairs;
-        this.total = trainingPairs.size(); // ---
-        this.incorrect = 0;
+        while (true) {
+            this.getRandomPair();
+            ImageIcon imageIcon = new ImageIcon(this.currentPair.getPic(), "picture");
+            String word = JOptionPane.showInputDialog(null, this.getStats() + "\nWas ist auf dem Bild zu sehen?" + imageIcon.getImage(), "Worttrainer", JOptionPane.QUESTION_MESSAGE);
+            if (word == null) {
+                break;
+            }
+            if (this.checkIgnoreCase(word)) {
+                JOptionPane.showMessageDialog(null, "Richtig!", "Worttrainer", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(null, "Falsch! Das gesuchte Wort war: " + this.getCurrentPair().getWord(), "Worttrainer", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+
+
+
+
+        if(JOptionPane.showConfirmDialog(
+                null,
+                "Spielstand speichern?",
+                "laden",
+                JOptionPane.YES_NO_OPTION
+        ) == 0) {
+            saveload.save("test.json");
+        }
     }
 
     public void setDefaultTrainingPairs(){
@@ -34,13 +68,42 @@ public class Wordtrainer {
         if(this.currentPair != null){
             return this.currentPair;
         }
-        throw new NullPointerException("current pair is null");
+        throw new NullPointerException("Error while getting current pair: current pair is null");
+    }
+
+    public List<TrainingPair> getTrainingPairs(){
+        return this.trainingPairs;
+    }
+
+    public void setTrainingPairs(List<TrainingPair> trainingPairs){
+        this.trainingPairs = trainingPairs;
     }
 
     public TrainingPair getRandomPair(){
         this.currentPair = this.trainingPairs.get((int) (Math.random() * this.trainingPairs.size()));
         return this.currentPair;
     }
+
+    public int getTotal(){
+        return this.total;
+    }
+
+    public int getIncorrect(){
+        return this.incorrect;
+    }
+
+    public void setTotal(int total) {
+        this.total = total;
+    }
+
+    public void setIncorrect(int incorrect) {
+        this.incorrect = incorrect;
+    }
+
+    public String getStats(){
+        return "Total: " + this.total + " Incorrect: " + this.incorrect;
+    }
+
 
     public boolean check(String word) {
         this.total++;

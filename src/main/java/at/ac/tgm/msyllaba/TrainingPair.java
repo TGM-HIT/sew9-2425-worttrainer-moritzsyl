@@ -1,6 +1,8 @@
 package at.ac.tgm.msyllaba;
 
 import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 
 public class TrainingPair {
@@ -16,12 +18,12 @@ public class TrainingPair {
     public void setPic(String picUrl) {
         if (picUrl != null && !picUrl.isEmpty()) {
             try{
-                this.pic = new URL(picUrl); //evtl. .toURL();
-            }catch (MalformedURLException exc){
+                this.pic = new URI(picUrl).toURL();
+            }catch (MalformedURLException | URISyntaxException exc){
                 System.err.println("invalid url");
             }
         } else {
-            throw new IllegalArgumentException("url string is empty");
+            throw new IllegalArgumentException("Error while setting picture: url string parameter is empty or null");
         }
     }
 
@@ -33,7 +35,7 @@ public class TrainingPair {
         if(word != null && !word.isEmpty()) {
             this.word = word;
         } else {
-            throw new IllegalArgumentException("word is empty");
+            throw new IllegalArgumentException("Error while setting word: word parameter is empty or null");
         }
     }
 
