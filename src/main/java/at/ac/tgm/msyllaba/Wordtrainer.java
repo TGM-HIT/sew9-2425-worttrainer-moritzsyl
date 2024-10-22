@@ -15,20 +15,17 @@ public class Wordtrainer {
     private SaveLoad saveload = new SaveLoadJSON(this);
 
     public Wordtrainer() {
-        if(JOptionPane.showConfirmDialog(
-                null,
-                "Spielstand laden?",
-                "laden",
-                JOptionPane.YES_NO_OPTION
-            ) == 0) {
+        if(JOptionPane.showConfirmDialog(null, "Spielstand laden?", "laden", JOptionPane.YES_NO_OPTION) == 0) {
             saveload.load("test.json");
         } else{
             this.setDefaultTrainingPairs();
         }
+
         while (true) {
             this.getRandomPair();
             ImageIcon imageIcon = new ImageIcon(this.currentPair.getPic(), "picture");
-            String word = JOptionPane.showInputDialog(null, this.getStats() + "\nWas ist auf dem Bild zu sehen?" + imageIcon.getImage(), "Worttrainer", JOptionPane.QUESTION_MESSAGE);
+            imageIcon.getImage().getScaledInstance(300, 300, Image.SCALE_DEFAULT);
+            String word = JOptionPane.showInputDialog(null, this.getStats() + "\nWas ist auf dem Bild zu sehen?", "Worttrainer", JOptionPane.QUESTION_MESSAGE, imageIcon, null, "").toString();
             if (word == null) {
                 break;
             }
@@ -39,15 +36,7 @@ public class Wordtrainer {
             }
         }
 
-
-
-
-        if(JOptionPane.showConfirmDialog(
-                null,
-                "Spielstand speichern?",
-                "laden",
-                JOptionPane.YES_NO_OPTION
-        ) == 0) {
+        if(JOptionPane.showConfirmDialog(null, "Spielstand speichern?", "laden", JOptionPane.YES_NO_OPTION) == 0) {
             saveload.save("test.json");
         }
     }
