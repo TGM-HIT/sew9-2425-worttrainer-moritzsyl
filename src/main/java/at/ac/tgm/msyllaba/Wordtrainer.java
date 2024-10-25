@@ -1,9 +1,7 @@
 package at.ac.tgm.msyllaba;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -75,9 +73,8 @@ public class Wordtrainer {
         this.trainingPairs = trainingPairs;
     }
 
-    public TrainingPair getRandomPair(){
+    public void getRandomPair(){
         this.currentPair = this.trainingPairs.get((int) (Math.random() * this.trainingPairs.size()));
-        return this.currentPair;
     }
 
     public int getTotal(){
