@@ -53,7 +53,7 @@ public class SaveLoadJSON implements SaveLoad{
             JSONArray jsonArray = new JSONArray(json);
 
             //Pairs
-            for (int i = 0; i < jsonArray.length() - 2; i++) {
+            for (int i = 0; i < jsonArray.length() - 1; i++) {
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
                 String url = jsonObject.getString("url");
                 String word = jsonObject.getString("word");

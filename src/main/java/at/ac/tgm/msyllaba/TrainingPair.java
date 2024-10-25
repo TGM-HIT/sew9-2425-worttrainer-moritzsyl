@@ -20,7 +20,7 @@ public class TrainingPair {
             try{
                 this.pic = new URI(picUrl).toURL();
             }catch (MalformedURLException | URISyntaxException exc){
-                System.err.println("invalid url");
+                throw new IllegalArgumentException("Error while setting picture: invalid url");
             }
         } else {
             throw new IllegalArgumentException("Error while setting picture: url string parameter is empty or null");
