@@ -46,7 +46,8 @@ public class SaveLoadJSON implements SaveLoad{
     @Override
     public void load(String path){
         List<TrainingPair> pairs = new ArrayList<>();
-        int total, incorrect;
+        int total = -1;
+        int incorrect = -1;
         try {
             String json = new String(Files.readAllBytes(Paths.get("src/main/resources/"+path)));
             JSONArray jsonArray = new JSONArray(json);

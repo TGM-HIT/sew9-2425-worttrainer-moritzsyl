@@ -16,18 +16,25 @@ public class Wordtrainer {
 
     public Wordtrainer() {
         if(JOptionPane.showConfirmDialog(null, "Spielstand laden?", "laden", JOptionPane.YES_NO_OPTION) == 0) {
-            saveload.load("test.json");
+            try {
+                saveload.load("trainer.json");
+            } catch (RuntimeException exc) {
+                System.out.println("Error while loading: loading default training pairs");
+                this.setDefaultTrainingPairs();
+            }
         } else{
             this.setDefaultTrainingPairs();
         }
 
         while (true) {
             this.getRandomPair();
-            ImageIcon imageIcon = new ImageIcon(this.currentPair.getPic(), "picture");
-            imageIcon.getImage().getScaledInstance(300, 300, Image.SCALE_DEFAULT);
-            String word = JOptionPane.showInputDialog(null, this.getStats() + "\nWas ist auf dem Bild zu sehen?", "Worttrainer", JOptionPane.QUESTION_MESSAGE, imageIcon, null, "").toString();
-            if (word == null) {
-                break;
+            Image image = new ImageIcon(this.currentPair.getPic(), "picture").getImage().getScaledInstance(300, 300, Image.SCALE_DEFAULT);
+            ImageIcon imageIcon =  new ImageIcon(image);
+            String word;
+            try{
+                word = JOptionPane.showInputDialog(null, this.getStats() + "\nWas ist auf dem Bild zu sehen?", "Worttrainer", JOptionPane.QUESTION_MESSAGE, imageIcon, null, "").toString();
+            }catch (NullPointerException exc){
+                    break;
             }
             if (this.checkIgnoreCase(word)) {
                 JOptionPane.showMessageDialog(null, "Richtig!", "Worttrainer", JOptionPane.INFORMATION_MESSAGE);
@@ -37,7 +44,7 @@ public class Wordtrainer {
         }
 
         if(JOptionPane.showConfirmDialog(null, "Spielstand speichern?", "laden", JOptionPane.YES_NO_OPTION) == 0) {
-            saveload.save("test.json");
+            saveload.save("trainer.json");
         }
     }
 
@@ -90,17 +97,7 @@ public class Wordtrainer {
     }
 
     public String getStats(){
-        return "Total: " + this.total + " Incorrect: " + this.incorrect;
-    }
-
-
-    public boolean check(String word) {
-        this.total++;
-        if(this.currentPair.getWord().equals(word)){
-            return true;
-        }
-        this.incorrect++;
-        return false;
+        return "Total: " + this.total + " Correct: " + (this.total - this.incorrect) + " Incorrect: " + this.incorrect;
     }
 
     public boolean checkIgnoreCase(String word) {
